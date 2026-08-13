@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucknow Metro Root Planner</title>
+    <link rel="icon" type="image/png" href="metro-logo.jpg">
+    <meta name="description" content="Professional Lucknow Metro route planner with shortest route, tourist station finder, smart card recharge and metro map.">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">🚇</div>
+                <div>
+                    <h1>Lucknow Metro</h1>
+                    <p>Route Planner</p>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <button class="nav-item active" data-view="dashboard"><span>⌂</span> Dashboard</button>
+                <button class="nav-item" data-view="route"><span>⇄</span> Route Planner</button>
+                <button class="nav-item" data-view="tourist"><span>⌖</span> Tourist Places</button>
+                <button class="nav-item" data-view="card"><span>▣</span> Smart Card</button>
+                <button class="nav-item" data-view="map"><span>▤</span> Metro Map</button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="line-badge"><span></span> Red Line</div>
+                <small>Lucknow Metro Rail<br>Route Management System</small>
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">TRANSPORTATION SYSTEM</p>
+                    <h2 id="pageTitle">Metro Dashboard</h2>
+                </div>
+                <div class="status"><span></span> System Online</div>
+            </header>
+
+            <section id="dashboard" class="view active">
+                <div class="hero">
+                    <div>
+                        <p class="eyebrow">WELCOME TO</p>
+                        <h3>Lucknow Metro<br><strong>Route Planner</strong></h3>
+                        <p class="hero-copy">Plan your journey, find nearby metro stations, manage your smart card and explore the network.</p>
+                        <button class="primary" data-go="route">Plan a Journey <span>→</span></button>
+                    </div>
+                    <div class="hero-art">
+                        <div class="metro-ring"></div>
+                        <div class="train">🚇</div>
+                        <div class="station-dot d1"></div>
+                        <div class="station-dot d2"></div>
+                        <div class="station-dot d3"></div>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card"><span class="stat-icon">🚉</span>
+                        <div><b id="stationCount">21</b><small>Stations</small></div>
+                    </div>
+                    <div class="stat-card"><span class="stat-icon">🗺️</span>
+                        <div><b id="tourCount">47</b><small>Tourist Places</small></div>
+                    </div>
+                    <div class="stat-card"><span class="stat-icon">🔴</span>
+                        <div><b>1</b><small>Active Line</small></div>
+                    </div>
+                    <div class="stat-card"><span class="stat-icon">💳</span>
+                        <div><b id="cardCount">3</b><small>Smart Cards</small></div>
+                    </div>
+                </div>
+
+                <div class="quick-grid">
+                    <button class="quick-card" data-go="route"><span>⇄</span><b>Find a Route</b><small>Shortest & economical journey</small></button>
+                    <button class="quick-card" data-go="tourist"><span>⌖</span><b>Tourist Station Finder</b><small>Find the nearest station</small></button>
+                    <button class="quick-card" data-go="card"><span>▣</span><b>Recharge Smart Card</b><small>Manage your travel balance</small></button>
+                    <button class="quick-card" data-go="map"><span>▤</span><b>View Metro Map</b><small>Explore the network</small></button>
+                </div>
+            </section>
+
+            <section id="route" class="view">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">JOURNEY PLANNER</p>
+                        <h3>Find Your Route</h3>
+                    </div><span class="pill">Dijkstra + BFS</span></div>
+                <div class="panel">
+                    <div class="form-grid">
+                        <label>From Station
+              <select id="source"></select>
+            </label>
+                        <button class="swap" id="swap" title="Swap stations">⇄</button>
+                        <label>To Station
+              <select id="destination"></select>
+            </label>
+                    </div>
+                    <div class="route-options">
+                        <label class="radio"><input type="radio" name="routeType" value="economic" checked><span></span><div><b>Most Economical</b><small>Minimum travel cost / hops</small></div></label>
+                        <label class="radio"><input type="radio" name="routeType" value="shortest"><span></span><div><b>Shortest Route</b><small>Minimum number of stops</small></div></label>
+                    </div>
+                    <button class="primary full" id="findRoute">Find Route <span>→</span></button>
+                </div>
+                <div id="routeResult" class="result hidden"></div>
+            </section>
+
+            <section id="tourist" class="view">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">CITY EXPLORER</p>
+                        <h3>Tourist Station Finder</h3>
+                    </div>
+                </div>
+                <div class="panel">
+                    <label>Choose a tourist destination
+            <select id="touristSelect"></select>
+          </label>
+                    <button class="primary full" id="findTourist">Find Nearest Station <span>→</span></button>
+                </div>
+                <div id="touristResult" class="result hidden"></div>
+            </section>
+
+            <section id="card" class="view">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">TRAVEL WALLET</p>
+                        <h3>Smart Card Recharge</h3>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="form-grid two">
+                        <label>Smart Card Number
+              <input id="cardId" type="text" inputmode="numeric" autocomplete="off"
+                     maxlength="20" placeholder="Enter your smart card number">
+            </label>
+                        <label>Recharge Amount (₹)
+              <input id="amount" type="number" min="1" step="1" placeholder="Enter amount">
+            </label>
+                    </div>
+                    <div class="balance-box"><span>Current Balance</span><strong id="currentBalance">₹0</strong></div>
+                    <button class="primary full" id="recharge">Recharge Card <span>→</span></button>
+                    <p class="note">Enter your Smart Card Number to check the available balance and recharge.</p>
+                </div>
+                <div id="cardResult" class="result hidden"></div>
+            </section>
+
+            <section id="map" class="view">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">NETWORK OVERVIEW</p>
+                        <h3>Lucknow Metro Map</h3>
+                    </div>
+                </div>
+                <div class="map-panel">
+                    <img src="lucknow-metro-rail-map.png" alt="Lucknow Metro Rail Map">
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
